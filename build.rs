@@ -101,27 +101,29 @@ fn configure() -> io::Result<()> {
     configure.arg("--disable-shared");
     configure.arg("--disable-silent-rules");
 
-    macro_rules! enable {
+    macro_rules! flag {
         ($conf:expr, $feat:expr, $name:expr) => {
             if env::var(concat!("CARGO_FEATURE_", $feat)).is_ok() {
                 $conf.arg(concat!("--enable-", $name));
+            } else {
+                $conf.arg(concat!("--disable-", $name));
             }
         };
     }
 
-    enable!(configure, "NCURSES", "ncurses");
-    enable!(configure, "SLANG", "slang");
-    enable!(configure, "GL", "gl");
-    enable!(configure, "NETWORK", "network");
-    enable!(configure, "IMLIB2", "imlib2");
+    flag!(configure, "NCURSES", "ncurses");
+    flag!(configure, "SLANG", "slang");
+    flag!(configure, "GL", "gl");
+    flag!(configure, "NETWORK", "network");
+    flag!(configure, "IMLIB2", "imlib2");
     #[cfg(windows)]
-    enable!(configure, "CONIO", "conio");
+    flag!(configure, "CONIO", "conio");
     #[cfg(windows)]
-    enable!(configure, "WIN32", "win32");
+    flag!(configure, "WIN32", "win32");
     #[cfg(all(unix, not(target_os = "macos")))]
-    enable!(configure, "X11", "x11");
+    flag!(configure, "X11", "x11");
     #[cfg(target_os = "macos")]
-    enable!(configure, "COCOA", "cocoa");
+    flag!(configure, "COCOA", "cocoa");
 
     let output = configure
         .output()
