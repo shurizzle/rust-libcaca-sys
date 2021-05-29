@@ -2,6 +2,7 @@ use std::{env, fs, io, path::PathBuf};
 
 fn main() {
     fs::create_dir_all(search().join("lib")).unwrap();
+    fs::create_dir_all(search().join("include")).unwrap();
     add_cflags().unwrap();
     add_ldflags().unwrap();
     zlib::build().unwrap();
