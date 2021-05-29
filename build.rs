@@ -243,17 +243,27 @@ mod caca {
         disable!("imlib2");
         disable!("ncurses");
 
-        #[cfg(windows)]
-        feature!("conio");
-        #[cfg(windows)]
-        feature!("win32");
-        #[cfg(all(unix, not(target_os = "macos")))]
-        feature!("x11");
-        if cfg!(feature = "x11") {
-            configure.arg("--with-X");
+        if cfg!(windows) {
+            feature!("conio");
+            feature!("win32");
+        } else {
+            disable!("conio");
+            disable!("win32");
         }
-        #[cfg(target_os = "macos")]
-        feature!("cocoa");
+        if cfg!(all(unix, not(target_os = "macos"))) {
+            feature!("x11");
+            if cfg!(feature = "x11") {
+                configure.arg("--with-X");
+            }
+        } else {
+            disable!("x11");
+        }
+
+        if cfg!(target_os = "cocoa") {
+            feature!("cocoa");
+        } else {
+            disable!("cocoa");
+        }
 
         let output = configure
             .output()
