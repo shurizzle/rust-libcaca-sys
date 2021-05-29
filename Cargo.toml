@@ -11,15 +11,11 @@ libc = "0.2.95"
 
 [build-dependencies]
 bindgen = "0.58.1"
+cmake = "0.1.45"
 num_cpus = "1.13.0"
 
 [features]
 default = []
-ncurses = []
-slang = []
-gl = []
-network = []
-imlib2 = []
 conio = []
 win32 = []
 x11 = []
